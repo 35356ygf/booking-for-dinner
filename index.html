@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking place for your dinner!</title>
+    <style>
+        .error {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Booking place for your dinner!</h1>
+
+<form id="myForm">
+    <div>
+        <label for="nameInput">Name:</label>
+        <input type="text" id="nameInput" name="name" required>
+        <span id="nameError" style="color: red;"></span>
+    </div>
+    <div>
+        <label for="numberinput">Phone number:</label>
+        <input type="text" id="numberinput" name="number" required>
+        <span id="phoneError" style="color: red;"></span>
+    </div>
+
+    <h4>Select a time</h4>
+    <input type="radio" id="time1" name="programtime" value="5:00" checked> 
+    <label for="time1">5:00</label><br>
+    <input type="radio" id="time2" name="programtime" value="6:00"> 
+    <label for="time2">6:00</label><br>
+    <input type="radio" id="time3" name="programtime" value="7:00"> 
+    <label for="time3">7:00</label><br>
+    <input type="radio" id="time4" name="programtime" value="8:00"> 
+    <label for="time4">8:00</label><br>
+
+    <h4>What would you like to have with us?</h4>
+    <input type="checkbox" name="snacks" value="veg manchurian"> Starters<br>
+    <input type="checkbox" name="snacks" value="Dal makhni"> Main-course<br>
+    <input type="checkbox" name="snacks" value="cake"> Desserts<br>
+    <input type="checkbox" name="snacks" value="beer"> Drinks<br>
+
+    <div>
+        <button type="submit" id="submitBtn">Submit</button>
+        <span id="message"></span>
+    </div>
+</form>
+
+<script>
+   function validateName() {
+    var x = document.getElementById('nameInput');
+    var y = document.getElementById('nameError');
+    var name = x.value.trim();
+
+    if (name === '') {
+        x.classList.add('error');
+        y.textContent = 'Error: Name is empty.';
+        return false;
+    } else if (!name.includes(' ')) {
+        x.classList.add('error');
+        y.textContent = 'Error: First and last names are required.';
+        return false;
+    } else {
+        x.classList.remove('error');
+        y.textContent = '';
+        return true;
+    }
+}
+function validatePhone() {
+    var x = document.getElementById('numberinput');
+    var y = document.getElementById('phoneError');
+    var phone = x.value.trim();
+    
+    if (phone === '') {
+        x.classList.add('error');
+        y.textContent = 'Error: Phone number is empty.';
+        return false;
+    } else if (!/^\d/.test(phone) || phone.length !== 6) {
+        x.classList.add('error');
+        y.textContent = phone.length !== 6 ? 'Error: Phone numbers must have  6 numbers only.' : 'Error: Phone number must start with numbers.';
+        return false;
+    } else {
+        x.classList.remove('error');
+        y.textContent = '';
+        return true;
+    }
+}
+
+    
+    function validateForm() {
+        validateName();
+        validatePhone();
+    }
+
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    
+    var x = document.getElementById('nameInput');
+    var y = document.getElementById('numberinput');
+    var nameIsValid = validateName();
+    var phoneIsValid = validatePhone();
+    
+    if (nameIsValid && phoneIsValid) {
+        var name = x.value.trim();
+        var phone = y.value.trim();
+        var time = document.querySelector('input[name="programtime"]:checked').value;
+        var snacks = Array.from(document.querySelectorAll('input[name="snacks"]:checked')).map(function(checkbox) {
+            return checkbox.value;
+        }).join(', ');
+        
+        var message = "Reservation for: " + name + " phone(" + phone + ") at " + time + " starters are: " + snacks;
+    } else {
+        var message = 'Please fix the errors  before submitting.';
+    }
+    
+    document.getElementById('message').textContent = message;
+});
+
+</script>
+</body>
+
+</html>
